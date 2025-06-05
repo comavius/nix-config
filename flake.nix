@@ -30,6 +30,7 @@
           ./core/i18n/i18n.nix
           ./hosts/note/network.nix
           ./hosts/note/boot.nix
+          ./hardware-configuration.nix
           /*
           home-manager.nixosModules.home-manager
           {
