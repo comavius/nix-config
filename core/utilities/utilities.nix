@@ -6,5 +6,6 @@
     dive
     fastfetch
     zellij
+    git
   ];
 }
