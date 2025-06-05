@@ -26,12 +26,11 @@
           ./core/utilities/utilities.nix
           ./core/user/user.nix
           ./core/nixconf/nixconf.nix
-          # ./core/desktop/desktop.nix
+          ./core/desktop/desktop.nix
           ./core/i18n/i18n.nix
           ./hosts/note/network.nix
           ./hosts/note/boot.nix
           ./hardware-configuration.nix
-          /*
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
@@ -47,7 +46,6 @@
               };
             };
           }
-           */
         ];
         specialArgs = {
           inherit self;
