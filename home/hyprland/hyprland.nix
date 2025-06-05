@@ -15,7 +15,7 @@ in
   };
   home.file."${hyprlandConfDirFromHomeDir}" = builtins.listToAttrs (builtins.map (confFile: {
     name = confFile;
-    value = { text = builtins.readFile "./${confFile}"; };
+    value = { text = builtins.readFile ./${confFile}; };
   }) hyprlandConfFiles);
 
   programs.waybar = {
