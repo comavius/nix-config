@@ -13,10 +13,10 @@ in
       source = builtins.map(confFile: "${hyprlandConfDir}/${confFile}") hyprlandConfFiles;
     };
   };
-  home.file."${hyprlandConfDirFromHomeDir}" = builtins.listToAttrs builtins.map (confFile: {
+  home.file."${hyprlandConfDirFromHomeDir}" = builtins.listToAttrs (builtins.map (confFile: {
     name = confFile;
     value = { text = builtins.readFile "./${confFile}"; };
-  }) hyprlandConfFiles;
+  }) hyprlandConfFiles);
 
   programs.waybar = {
     enable = true;
