@@ -7,5 +7,6 @@
     fastfetch
     zellij
     git
+    firefox
   ];
 }
