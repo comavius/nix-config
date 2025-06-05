@@ -23,7 +23,7 @@ in
     systemd.enable = true;
   };
 
-  programs.anyrun.enable = true;
+  programs.rofi.enable = true;
 
   # screen locker
   programs.hyprlock.enable = true;
