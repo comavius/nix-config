@@ -4,7 +4,7 @@
     settings = {
       source = [
         # "./exec.conf"
-        ./keybindings.conf
+        "./keybindings.conf"
       ];
     };
   };
