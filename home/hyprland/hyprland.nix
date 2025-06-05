@@ -13,8 +13,8 @@ in
       source = builtins.map(confFile: "${hyprlandConfDir}/${confFile}") hyprlandConfFiles;
     };
   };
-  home.file."${hyprlandConfDirFromHomeDir}" = builtins.listToAttrs (builtins.map (confFile: {
-    name = confFile;
+  home.file = builtins.listToAttrs (builtins.map (confFile: {
+    name = "${hyprlandConfDirFromHomeDir}/${confFile}";
     value = { text = builtins.readFile ./${confFile}; };
   }) hyprlandConfFiles);
 
