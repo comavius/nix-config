@@ -3,8 +3,8 @@
     enable = true;
     settings = {
       source = [
-        "./exec.conf"
-        "./keybindings.conf"
+        # "./exec.conf"
+        ./keybindings.conf
       ];
     };
   };
