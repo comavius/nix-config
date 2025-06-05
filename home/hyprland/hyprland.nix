@@ -2,6 +2,7 @@
 let
   hyprlandConfFiles = [
     "keybindings.conf"
+    "devices.conf"
   ];
   hyprlandConfDirFromHomeDir = ".config/hypr";
   hyprlandConfDir = "${conf.homeDirectory}/${hyprlandConfDirFromHomeDir}";
