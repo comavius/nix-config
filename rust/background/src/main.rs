@@ -52,6 +52,15 @@ impl Dispatch<wl_registry::WlRegistry, ()> for AppState {
                     );
                     state.compositor = Some(compositor);
                 }
+                if interface == wl_shm::WlShm::interface().name {
+                    let shm = registry.bind::<wl_shm::WlShm, _, _>(
+                        name,
+                        version,
+                        qhandle,
+                        (),
+                    );
+                    state.shm = Some(shm);
+                }
             }
             wl_registry::Event::GlobalRemove { name: _name } => {}
             _ => {}
@@ -112,6 +121,25 @@ impl Dispatch<wl_buffer::WlBuffer, ()> for AppState {
         _conn: &Connection,
         _qh: &QueueHandle<AppState>,
     ) {}
+}
+
+impl Dispatch<wl_shm::WlShm, ()> for AppState {
+    fn event(
+        state: &mut Self,
+        _shm: &wl_shm::WlShm,
+        event: wl_shm::Event,
+        _data: &(),
+        _conn: &Connection,
+        qhandle: &QueueHandle<AppState>,
+    ) {
+        match event {
+            wl_shm::Event::Format { format } => {
+                println!("Supported format: {:?}", format);
+                // You can check if ARGB8888 is supported here
+            }
+            _ => {}
+        }
+    }
 }
 
 
