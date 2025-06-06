@@ -111,7 +111,7 @@ impl Dispatch<zwlr_layer_surface_v1::ZwlrLayerSurfaceV1, ()> for State {
 
 fn main() {
     let connection = Connection::connect_to_env().expect("Failed to connect to Wayland server");
-    // let display = connection.display();
+    let _display = connection.display();
     let mut event_queue: EventQueue<State> = connection.new_event_queue();
     let qhandle = event_queue.handle();
     // let registry = display.get_registry(&qhandle, ());
