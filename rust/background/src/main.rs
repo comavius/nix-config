@@ -1,15 +1,20 @@
-use wayland_client::{
-    Connection, Dispatch, EventQueue, QueueHandle,
-    protocol::{wl_surface, wl_registry, wl_compositor},
-};
+use std::os::unix::io::AsFd;
+use std::io::Write;
+use wayland_client::{  
+    protocol::{wl_registry, wl_compositor, wl_shm, wl_shm_pool, wl_surface, wl_buffer},  
+    Connection, Dispatch, QueueHandle, EventQueue  
+};  
+  
+const WIDTH: i32 = 800;  
+const HEIGHT: i32 = 600;  
+  
+struct AppState {  
+    compositor: Option<wl_compositor::WlCompositor>,  
+    shm: Option<wl_shm::WlShm>,  
+    surface: Option<wl_surface::WlSurface>,  
+    buffer: Option<wl_buffer::WlBuffer>,  
+}  
 use wayland_client::Proxy;
-
-// Application state struct
-struct AppState {
-    // You can add your application-specific state here
-    running: bool,
-    compositor: Option<wl_compositor::WlCompositor>,
-}
 
 impl Dispatch<wl_compositor::WlCompositor, ()> for AppState {
     fn event(
@@ -87,34 +92,79 @@ impl Dispatch<wl_surface::WlSurface, ()> for AppState {
     }
 }
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
-    // Step 1: Create connection to Wayland compositor
-    let conn = Connection::connect_to_env()?;
+impl Dispatch<wl_shm_pool::WlShmPool, ()> for AppState {
+    fn event(
+            _state: &mut Self,
+            _pool: &wl_shm_pool::WlShmPool,
+            _event: wl_shm_pool::Event,
+            _data: &(),
+            _conn: &Connection,
+            _qh: &QueueHandle<AppState>,
+        ) {}
+}
 
-    // Step 2: Get the display object (root Wayland object)
-    let display = conn.display();
+impl Dispatch<wl_buffer::WlBuffer, ()> for AppState {
+    fn event(
+        _state: &mut Self,
+        _buffer: &wl_buffer::WlBuffer,
+        _event: wl_buffer::Event,
+        _data: &(),
+        _conn: &Connection,
+        _qh: &QueueHandle<AppState>,
+    ) {}
+}
 
-    // Step 3: Create event queue for processing events
-    let mut event_queue = conn.new_event_queue();
-    let qh = event_queue.handle();
 
-    // Step 4: Create registry to discover available globals
-    let _registry = display.get_registry(&qh, ());
-
-    // Step 5: Initialize application state
-    let mut app_state = AppState { running: true, compositor: None };
-
-    // Step 6: Perform initial roundtrip to get all globals
-    event_queue.roundtrip(&mut app_state)?;
-
-    println!("Wayland client initialized successfully!");
-
-    if let Some(ref compositor) = app_state.compositor {  
-        println!("Creating surface...");  
-        let surface = compositor.create_surface(&qh, ());  
-        println!("Surface created successfully!");
-    } else {  
-        println!("No compositor found!");  
+fn main() -> Result<(), Box<dyn std::error::Error>> {  
+    // Step 1: Connect to Wayland  
+    let conn = Connection::connect_to_env()?;  
+    let display = conn.display();  
+    let mut event_queue = conn.new_event_queue();  
+    let qh = event_queue.handle();  
+  
+    // Step 2: Get registry and bind to globals  
+    let _registry = display.get_registry(&qh, ());  
+    let mut app_state = AppState {  
+        compositor: None,  
+        shm: None,  
+        surface: None,  
+        buffer: None,  
+    };  
+  
+    // Initial roundtrip to get globals  
+    event_queue.roundtrip(&mut app_state)?;  
+  
+    // Step 3: Create surface  
+    let compositor = app_state.compositor.as_ref().unwrap();  
+    let surface = compositor.create_surface(&qh, ());  
+    app_state.surface = Some(surface.clone());  
+  
+    // Step 4: Create shared memory buffer with white pixels  
+    let shm = app_state.shm.as_ref().unwrap();  
+    let mut file = tempfile::tempfile()?;  
+    let stride = WIDTH * 4; // 4 bytes per pixel (ARGB)  
+    let size = stride * HEIGHT;  
+      
+    // Fill with white pixels (0xFFFFFFFF in ARGB format)  
+    let white_pixel = 0xFFFFFFFFu32;  
+    for _ in 0..(WIDTH * HEIGHT) {  
+        file.write_all(&white_pixel.to_ne_bytes())?;  
     }  
-    Ok(())
+    file.flush()?;  
+  
+    let pool = shm.create_pool(file.as_fd(), size, &qh, ());  
+    let buffer = pool.create_buffer(  
+        0, WIDTH, HEIGHT, stride,   
+        wl_shm::Format::Argb8888, &qh, ()  
+    );  
+    app_state.buffer = Some(buffer.clone());  
+  
+    // Step 5: Attach buffer and commit surface  
+    surface.attach(Some(&buffer), 0, 0);  
+    surface.commit();  
+  
+    // Step 6: Keep the window alive  
+    loop {  
+        event_queue.blocking_dispatch(&mut app_state)?;  
+    }  
 }

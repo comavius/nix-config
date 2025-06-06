@@ -5,3 +5,4 @@ edition = "2024"
 
 [dependencies]
 wayland-client.workspace = true
+tempfile.workspace = true

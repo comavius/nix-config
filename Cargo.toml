@@ -10,3 +10,4 @@ members = [
 
 [workspace.dependencies]
 wayland-client = "0.31.10"
+tempfile = "3.20.0"
