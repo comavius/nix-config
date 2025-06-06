@@ -40,6 +40,7 @@
                 ./home/hyprland/hyprland.nix
                 ./home/home.nix
                 ./home/kitty/kitty.nix
+                ./home/waybar/waybar.nix
               ];
               _module.args = {
                 inherit conf;
