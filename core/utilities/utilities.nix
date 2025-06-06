@@ -8,5 +8,6 @@
     zellij
     git
     firefox
+    cargo
   ];
 }
