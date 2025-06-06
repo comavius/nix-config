@@ -1,6 +1,6 @@
 use wayland_client::{
     Connection, Dispatch, EventQueue, QueueHandle,
-    protocol::{wl_display, wl_registry, wl_compositor},
+    protocol::{wl_surface, wl_registry, wl_compositor},
 };
 use wayland_client::Proxy;
 
@@ -54,6 +54,17 @@ impl Dispatch<wl_registry::WlRegistry, ()> for AppState {
     }
 }
 
+impl Dispatch<wl_surface::WlSurface, ()> for AppState {
+    fn event(
+        _state: &mut Self,
+        _surface: &wl_surface::WlSurface,
+        _event: wl_surface::Event,
+        _data: &(),
+        _conn: &Connection,
+        _qhandle: &QueueHandle<AppState>,
+    ) {}
+}
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Step 1: Create connection to Wayland compositor
     let conn = Connection::connect_to_env()?;
@@ -76,7 +87,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("Wayland client initialized successfully!");
 
-    // Your main event loop would go here
-    // For this example, we'll just exit
+    if let Some(ref compositor) = app_state.compositor {  
+        println!("Creating surface...");  
+        let surface = compositor.create_surface(&qh, ());  
+        println!("Surface created successfully!");  
+        // You can now use the surface for your shader viewer  
+    } else {  
+        println!("No compositor found!");  
+    }  
     Ok(())
 }
