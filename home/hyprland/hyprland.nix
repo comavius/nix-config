@@ -19,11 +19,6 @@ in
     value = { text = builtins.readFile ./${confFile}; };
   }) hyprlandConfFiles);
 
-  programs.waybar = {
-    enable = true;
-    systemd.enable = true;
-  };
-
   programs.wofi.enable = true;
 
   # screen locker
