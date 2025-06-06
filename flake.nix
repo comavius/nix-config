@@ -41,6 +41,7 @@
                 ./home/home.nix
                 ./home/kitty/kitty.nix
                 ./home/waybar/waybar.nix
+                ./home/zsh/zsh.nix
               ];
               _module.args = {
                 inherit conf;
