@@ -28,12 +28,20 @@ impl Dispatch<wl_registry::WlRegistry, (), State> for State {
         match event {
             wl_registry::Event::Global { name, interface, version } => {
                 if interface == ZwlrLayerShellV1::interface().name {
+                    eprintln!(
+                        "Found layer shell interface: {} (version {})",
+                        interface, version
+                    );
                     let layer_shell = registry
                         .bind::<ZwlrLayerShellV1, _, _>
                         (name, version, qhandle, ());
                     state.layer_shell = Some(layer_shell);
                 }
                 else if interface == wl_compositor::WlCompositor::interface().name {
+                    eprintln!(
+                        "Found compositor interface: {} (version {})",
+                        interface, version
+                    );
                     let compositor = registry
                         .bind::<wl_compositor::WlCompositor, _, _>
                         (name, version, qhandle, ());
@@ -103,10 +111,10 @@ impl Dispatch<zwlr_layer_surface_v1::ZwlrLayerSurfaceV1, ()> for State {
 
 fn main() {
     let connection = Connection::connect_to_env().expect("Failed to connect to Wayland server");
-    let display = connection.display();
+    // let display = connection.display();
     let mut event_queue: EventQueue<State> = connection.new_event_queue();
     let qhandle = event_queue.handle();
-    let registry = display.get_registry(&qhandle, ());
+    // let registry = display.get_registry(&qhandle, ());
     let mut state = State { layer_shell: None, compositor: None };
     event_queue
         .roundtrip(&mut state)
