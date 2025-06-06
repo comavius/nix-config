@@ -10,6 +10,7 @@ use wayland_protocols_wlr::layer_shell::v1::client::{
 };
 use wayland_client::Proxy;
 
+#[derive(Clone)]
 struct State {
     layer_shell: Option<ZwlrLayerShellV1>,
     compositor: Option<wl_compositor::WlCompositor>,
@@ -111,8 +112,10 @@ fn main() {
         .roundtrip(&mut state)
         .expect("Failed to process initial registry events");
     let layer_shell = state.layer_shell
+        .clone()
         .expect("Layer shell not available on this Wayland server");
     let compositor = state.compositor
+        .clone()
         .expect("Compositor not available on this Wayland server");
     let surface = compositor.create_surface(&qhandle, ());
     let layer = zwlr_layer_shell_v1::Layer::Background;
@@ -129,4 +132,9 @@ fn main() {
     let keyboard_interactivity = zwlr_layer_surface_v1::KeyboardInteractivity::None;
     layer_surface.set_keyboard_interactivity(keyboard_interactivity);
     surface.commit();
+    loop {
+        event_queue
+            .blocking_dispatch(&mut state)
+            .expect("Failed to dispatch Wayland events");
+    }
 }
