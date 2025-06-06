@@ -118,7 +118,7 @@ fn main() {
         .clone()
         .expect("Compositor not available on this Wayland server");
     let surface = compositor.create_surface(&qhandle, ());
-    let layer = zwlr_layer_shell_v1::Layer::Background;
+    let layer = zwlr_layer_shell_v1::Layer::Top;
     let namespace = "background_layer".to_string();
     let layer_surface = layer_shell.get_layer_surface(&surface, None, layer, namespace , &qhandle, ());
     layer_surface.set_anchor(
