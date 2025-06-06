@@ -58,11 +58,33 @@ impl Dispatch<wl_surface::WlSurface, ()> for AppState {
     fn event(
         _state: &mut Self,
         _surface: &wl_surface::WlSurface,
-        _event: wl_surface::Event,
+        event: wl_surface::Event,
         _data: &(),
         _conn: &Connection,
         _qhandle: &QueueHandle<AppState>,
-    ) {}
+    ) {
+
+        match event {  
+            wl_surface::Event::Enter { output } => {  
+                println!("Surface entered output: {:?}", output);  
+                // Handle surface entering an output (monitor)  
+                // You might want to adjust rendering parameters here  
+            }  
+            wl_surface::Event::Leave { output } => {  
+                println!("Surface left output: {:?}", output);  
+                // Handle surface leaving an output  
+            }  
+            wl_surface::Event::PreferredBufferScale { factor } => {  
+                println!("Preferred buffer scale: {}", factor);  
+                // Handle HiDPI scaling - adjust your buffer size accordingly  
+            }  
+            wl_surface::Event::PreferredBufferTransform { transform } => {  
+                println!("Preferred buffer transform: {:?}", transform);  
+                // Handle display rotation/transformation  
+            }  
+            _ => {}  
+        }  
+    }
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -90,8 +112,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     if let Some(ref compositor) = app_state.compositor {  
         println!("Creating surface...");  
         let surface = compositor.create_surface(&qh, ());  
-        println!("Surface created successfully!");  
-        // You can now use the surface for your shader viewer  
+        println!("Surface created successfully!");
     } else {  
         println!("No compositor found!");  
     }  
