@@ -1,23 +1,36 @@
 use wayland_client::{
     Connection, Dispatch, EventQueue, QueueHandle,
-    protocol::{wl_display, wl_registry},
+    protocol::{wl_display, wl_registry, wl_compositor},
 };
+use wayland_client::Proxy;
 
 // Application state struct
 struct AppState {
     // You can add your application-specific state here
     running: bool,
+    compositor: Option<wl_compositor::WlCompositor>,
+}
+
+impl Dispatch<wl_compositor::WlCompositor, ()> for AppState {
+    fn event(
+        _state: &mut Self,
+        _compositor: &wl_compositor::WlCompositor,
+        _event: wl_compositor::Event,
+        _data: &(),
+        _conn: &Connection,
+        _qhandle: &QueueHandle<AppState>,
+    ) {}
 }
 
 // Implement Dispatch for the registry to handle global advertisements
 impl Dispatch<wl_registry::WlRegistry, ()> for AppState {
     fn event(
         state: &mut Self,
-        _registry: &wl_registry::WlRegistry,
+        registry: &wl_registry::WlRegistry,
         event: wl_registry::Event,
         _data: &(),
         _conn: &Connection,
-        _qhandle: &QueueHandle<AppState>,
+        qhandle: &QueueHandle<AppState>,
     ) {
         match event {
             wl_registry::Event::Global {
@@ -25,13 +38,17 @@ impl Dispatch<wl_registry::WlRegistry, ()> for AppState {
                 interface,
                 version,
             } => {
-                println!("Global advertised: {} (v{}) [{}]", interface, version, name);
-                // Here you would typically bind to the globals you need
-                // For example: compositor, shell, seat, output, etc.
+                if interface == wl_compositor::WlCompositor::interface().name {
+                    let compositor = registry.bind::<wl_compositor::WlCompositor, _, _>(
+                        name,
+                        version,
+                        qhandle,
+                        (),
+                    );
+                    state.compositor = Some(compositor);
+                }
             }
-            wl_registry::Event::GlobalRemove { name } => {
-                println!("Global removed: {}", name);
-            }
+            wl_registry::Event::GlobalRemove { name: _name } => {}
             _ => {}
         }
     }
@@ -52,7 +69,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let _registry = display.get_registry(&qh, ());
 
     // Step 5: Initialize application state
-    let mut app_state = AppState { running: true };
+    let mut app_state = AppState { running: true, compositor: None };
 
     // Step 6: Perform initial roundtrip to get all globals
     event_queue.roundtrip(&mut app_state)?;
