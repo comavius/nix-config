@@ -1,0 +1,12 @@
+[workspace.package]
+name = "comavius nix-config utilities"
+version = "0.1.0"
+edition = "2024"
+
+[workspace]
+members = [
+    "rust/background",
+]
+
+[workspace.dependencies]
+wayland-client = "0.31.10"
