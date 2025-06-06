@@ -74,33 +74,48 @@ impl Dispatch<ZwlrLayerShellV1, ()> for AppState {
         // Layer shell typically doesn't send events
     }
 }
-
-impl Dispatch<ZwlrLayerSurfaceV1, ()> for AppState {
-    fn event(
-        _state: &mut Self,
-        layer_surface: &ZwlrLayerSurfaceV1,
-        event: zwlr_layer_surface_v1::Event,
-        _data: &(),
-        _conn: &Connection,
-        _qhandle: &QueueHandle<AppState>,
-    ) {
-        match event {
-            zwlr_layer_surface_v1::Event::Configure {
-                serial,
-                width,
-                height,
-            } => {
-                println!("Layer surface configure: {}x{}", width, height);
-                layer_surface.ack_configure(serial);
-                // Resize your buffer if needed
-            }
-            zwlr_layer_surface_v1::Event::Closed => {
-                println!("Layer surface closed");
-                // Handle surface being closed
-            }
-            _ => {}
-        }
-    }
+impl Dispatch<ZwlrLayerSurfaceV1, ()> for AppState {  
+    fn event(  
+        state: &mut Self,  
+        layer_surface: &ZwlrLayerSurfaceV1,  
+        event: zwlr_layer_surface_v1::Event,  
+        _data: &(),  
+        _conn: &Connection,  
+        qhandle: &QueueHandle<AppState>,  
+    ) {  
+        match event {  
+            zwlr_layer_surface_v1::Event::Configure { serial, width, height } => {  
+                println!("Layer surface configure: {}x{}", width, height);  
+                layer_surface.ack_configure(serial);  
+                  
+                // NOW create and attach the buffer  
+                if let (Some(shm), Some(surface)) = (&state.shm, &state.surface) {  
+                    // Create buffer with white pixels (similar to your previous code)  
+                    let mut file = tempfile::tempfile().unwrap();  
+                    let stride = WIDTH * 4;  
+                    let size = stride * HEIGHT;  
+                      
+                    let white_pixel = 0xFFFFFFFFu32;  
+                    for _ in 0..(WIDTH * HEIGHT) {  
+                        file.write_all(&white_pixel.to_ne_bytes()).unwrap();  
+                    }  
+                    file.flush().unwrap();  
+                      
+                    let pool = shm.create_pool(file.as_fd(), size, qhandle, ());  
+                    let buffer = pool.create_buffer(0, WIDTH, HEIGHT, stride, wl_shm::Format::Argb8888, qhandle, ());  
+                      
+                    surface.attach(Some(&buffer), 0, 0);  
+                    surface.commit();  
+                      
+                    state.buffer = Some(buffer);  
+                }  
+            }  
+            zwlr_layer_surface_v1::Event::Closed => {  
+                println!("Layer surface closed");  
+            }  
+            _ => {}  
+        }  
+    }  
 }
 
 impl Dispatch<wl_compositor::WlCompositor, ()> for AppState {
