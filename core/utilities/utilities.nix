@@ -9,5 +9,7 @@
     git
     firefox
     cargo
+    gcc
+    clang
   ];
 }
