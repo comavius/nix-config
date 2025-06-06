@@ -229,6 +229,27 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     layer_surface.set_size(WIDTH as u32, HEIGHT as u32);
     layer_surface.set_anchor(zwlr_layer_surface_v1::Anchor::empty()); // floating  
     layer_surface.set_exclusive_zone(0); // don't reserve space  
+    // After creating the layer surface, add buffer creation  
+    let shm = app_state.shm.as_ref().unwrap();  
+    let mut file = tempfile::tempfile()?;  
+    let stride = WIDTH * 4; // 4 bytes per pixel (ARGB)  
+    let size = stride * HEIGHT;  
+    
+    // Fill with white pixels (0xFFFFFFFF in ARGB format)  
+    let white_pixel = 0xFFFFFFFFu32;  
+    for _ in 0..(WIDTH * HEIGHT) {  
+        file.write_all(&white_pixel.to_ne_bytes())?;  
+    }  
+    file.flush()?;  
+    
+    let pool = shm.create_pool(file.as_fd(), size, &qh, ());  
+    let buffer = pool.create_buffer(  
+        0, WIDTH, HEIGHT, stride,   
+        wl_shm::Format::Argb8888, &qh, ()  
+    );  
+    
+    // Attach buffer to surface  
+    surface.attach(Some(&buffer), 0, 0);  
     surface.commit();
 
     // Step 6: Keep the window alive
