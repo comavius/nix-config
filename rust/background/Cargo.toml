@@ -7,3 +7,7 @@ edition = "2024"
 wayland-client.workspace = true
 tempfile.workspace = true
 wayland-protocols-wlr.workspace = true
+wayland-egl.workspace = true
+anyhow.workspace = true
+khronos-egl = { workspace = true, features = ["static"] }
+gl.workspace = true
