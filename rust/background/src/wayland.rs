@@ -24,6 +24,7 @@ pub struct State<G: Graphic> {
     unused_outputs: std::collections::HashSet<wl_output::WlOutput>,
     output_sizes: std::collections::HashMap<ObjectId, (i32, i32)>,
     display_ptr: *mut std::ffi::c_void,
+    event_queue: Option<EventQueue<State<G>>>,
 }
 
 impl<G> State<G>
@@ -43,10 +44,12 @@ where
             unused_outputs: std::collections::HashSet::new(),
             output_sizes: std::collections::HashMap::new(),
             display_ptr: display_ptr as *mut std::ffi::c_void,
+            event_queue: None,
         };
         event_queue
             .roundtrip(&mut state)
             .expect("Failed to initialize Wayland state");
+        state.event_queue = Some(event_queue);
         if state.layer_shell.is_none() {
             eprintln!("Layer shell not available");
         }
@@ -86,6 +89,15 @@ where
             }
         }
         Ok(())
+    }
+
+    pub fn start(mut self) -> anyhow::Result<()> {
+        let mut event_queue = self.event_queue.take().expect("Event queue not initialized");
+        loop {
+            event_queue
+                .blocking_dispatch(&mut self)
+                .expect("Failed to dispatch Wayland events");
+        }
     }
 }
 

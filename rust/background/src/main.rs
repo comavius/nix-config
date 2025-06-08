@@ -16,5 +16,5 @@ use wayland_protocols_wlr::layer_shell::v1::client::{
 fn main() {
     let connection = Connection::connect_to_env().expect("Failed to connect to Wayland server");
     let state = wayland::State::<graphic::graphic_impl::GraphicImpl>::new(&connection);
-    
+    state.start().expect("Failed to start Wayland event loop");
 }
