@@ -12,19 +12,9 @@ use wayland_protocols_wlr::layer_shell::v1::client::{
     zwlr_layer_surface_v1::{self, ZwlrLayerSurfaceV1},
 };
 
-#[derive(Clone)]
-struct State {
-    layer_shell: Option<ZwlrLayerShellV1>,
-    compositor: Option<wl_compositor::WlCompositor>,
-}
 
 fn main() {
     let connection = Connection::connect_to_env().expect("Failed to connect to Wayland server");
-    let display = connection.display();
-    let mut event_queue: EventQueue<State> = connection.new_event_queue();
-    let qhandle = event_queue.handle();
-    let mut state = State {
-        layer_shell: None,
-        compositor: None,
-    };
+    let state = wayland::State::<graphic::graphic_impl::GraphicImpl>::new(&connection);
+    
 }

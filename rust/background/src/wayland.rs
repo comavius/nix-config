@@ -30,7 +30,7 @@ impl<G> State<G>
 where
     G: Graphic,
 {
-    fn new(connection: &Connection) -> Self {
+    pub fn new(connection: &Connection) -> Self {
         let display = connection.display();
         let display_ptr = display.backend().upgrade().unwrap().display_ptr();
         let mut event_queue: EventQueue<State<G>> = connection.new_event_queue();
