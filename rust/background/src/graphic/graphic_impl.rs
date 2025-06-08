@@ -17,12 +17,13 @@ impl super::Graphic for GraphicImpl {
         let instance = egl::Instance::new(egl::Static);
         let display = unsafe { instance.get_display(display_ptr) }
             .ok_or_else(|| anyhow::anyhow!("Failed to get EGL display"))?;
+        assert!(display.as_ptr() != egl::NO_DISPLAY, "EGL display is not valid");
         instance.initialize(display)?;
         let attributes = [
             egl::RED_SIZE, 8,
             egl::GREEN_SIZE, 8,
             egl::BLUE_SIZE, 8,
-            egl::NONE
+            egl::ALPHA_SIZE, 8,
         ];
         let config = instance.choose_first_config(display, &attributes)
             .expect("Failed to choose EGL config")
@@ -33,12 +34,12 @@ impl super::Graphic for GraphicImpl {
             egl::CONTEXT_OPENGL_PROFILE_MASK, egl::CONTEXT_OPENGL_CORE_PROFILE_BIT,
             egl::NONE
         ];
+        let context = instance.create_context(display, config, None, &context_attribute)
+        .map_err(|e| anyhow::anyhow!("Failed to create EGL context: {}", e))?;
         let surface = unsafe {
             instance.create_window_surface(display, config, surface_ptr as *mut c_void, None)
                 .map_err(|e| anyhow::anyhow!("Failed to create EGL surface: {}", e))?
         };
-        let context = instance.create_context(display, config, None, &context_attribute)
-            .map_err(|e| anyhow::anyhow!("Failed to create EGL context: {}", e))?;
         instance.make_current(display, Some(surface), None, Some(context))
             .map_err(|e| anyhow::anyhow!("Failed to make EGL context current: {}", e))?;
         Ok(Self {
