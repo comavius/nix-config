@@ -12,5 +12,6 @@
     gcc
     clang
     mesa
+    egl-wayland
   ];
 }
