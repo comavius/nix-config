@@ -33,12 +33,12 @@ impl super::Graphic for GraphicImpl {
             egl::CONTEXT_OPENGL_PROFILE_MASK, egl::CONTEXT_OPENGL_CORE_PROFILE_BIT,
             egl::NONE
         ];
-        let context = instance.create_context(display, config, None, &context_attribute)
-            .map_err(|e| anyhow::anyhow!("Failed to create EGL context: {}", e))?;
         let surface = unsafe {
             instance.create_window_surface(display, config, surface_ptr as *mut c_void, None)
                 .map_err(|e| anyhow::anyhow!("Failed to create EGL surface: {}", e))?
         };
+        let context = instance.create_context(display, config, None, &context_attribute)
+            .map_err(|e| anyhow::anyhow!("Failed to create EGL context: {}", e))?;
         instance.make_current(display, Some(surface), None, Some(context))
             .map_err(|e| anyhow::anyhow!("Failed to make EGL context current: {}", e))?;
         Ok(Self {
