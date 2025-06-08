@@ -11,5 +11,6 @@
     cargo
     gcc
     clang
+    mesa
   ];
 }
