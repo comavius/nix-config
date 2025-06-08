@@ -15,16 +15,24 @@ pub struct GraphicImpl {
 impl super::Graphic for GraphicImpl {
     fn new(surface_ptr: *mut c_void, display_ptr: *mut c_void, width: i32, height: i32) -> anyhow::Result<Self> {
         let instance = egl::Instance::new(egl::Static);
-        let native_display = egl::NativeDisplayType::from(display_ptr);
-        let display = unsafe { instance.get_display(native_display) }
+        let display = unsafe { instance.get_display(display_ptr) }
             .ok_or_else(|| anyhow::anyhow!("Failed to get EGL display"))?;
         assert!(display.as_ptr() != egl::NO_DISPLAY, "EGL display is not valid");
         instance.initialize(display)?;
         let attributes = [
-            egl::RED_SIZE, 8,
-            egl::GREEN_SIZE, 8,
-            egl::BLUE_SIZE, 8,
-            egl::NONE
+            egl::SURFACE_TYPE,
+            egl::WINDOW_BIT,
+            egl::RENDERABLE_TYPE,
+            egl::OPENGL_ES2_BIT,
+            egl::RED_SIZE,
+            8,
+            egl::GREEN_SIZE,
+            8,
+            egl::BLUE_SIZE,
+            8,
+            egl::ALPHA_SIZE,
+            8,
+            egl::NONE,
         ];
         let config = instance.choose_first_config(display, &attributes)
             .expect("Failed to choose EGL config")
