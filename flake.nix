@@ -55,5 +55,27 @@
           inherit conf;
         };
       };
-    };
+    } // flake-utils.lib.eachDefaultSystem (system:
+      let
+        pkgs = import nixpkgs {
+          inherit system;
+        };
+      in
+      {
+        packages.default = pkgs.rustPlatform.buildRustPackage {
+          pname = "my-wl-background";
+          version = "0.1.0";
+          src = ./.;
+          nativeBuildInputs = with pkgs; [
+            pkg-config
+          ];
+          buildInputs = with pkgs; [
+            libglvnd
+            wayland
+          ];
+          cargoLock = {
+            lockFile = ./Cargo.lock;
+          };
+        };
+      });
 }
