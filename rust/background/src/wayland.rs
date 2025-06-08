@@ -70,6 +70,7 @@ where
             let mut removal_list = vec![];
             for output in self.unused_outputs.iter() {
                 if let Some((w, h)) = self.output_sizes.get(&output.id()).cloned() {
+                    eprintln!("Creating surface of size {}x{} for output {}", w, h, output.id());
                     let surface = surface::Surface::<G>::new(
                         output,
                         layer_shell,
