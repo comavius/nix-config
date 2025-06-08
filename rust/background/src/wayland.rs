@@ -76,8 +76,8 @@ where
                         layer_shell,
                         compositor,
                         qhandle,
-                        w,
-                        h,
+                        1920,
+                        1440,
                         self.display_ptr,
                     )?;
                     let id = output.id();
