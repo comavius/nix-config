@@ -15,7 +15,8 @@ pub struct GraphicImpl {
 impl super::Graphic for GraphicImpl {
     fn new(surface_ptr: *mut c_void, display_ptr: *mut c_void, width: i32, height: i32) -> anyhow::Result<Self> {
         let instance = egl::Instance::new(egl::Static);
-        let display = unsafe { instance.get_display(display_ptr) }
+        let native_display = egl::NativeDisplayType::from(display_ptr);
+        let display = unsafe { instance.get_display(native_display) }
             .ok_or_else(|| anyhow::anyhow!("Failed to get EGL display"))?;
         assert!(display.as_ptr() != egl::NO_DISPLAY, "EGL display is not valid");
         instance.initialize(display)?;
