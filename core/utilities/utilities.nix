@@ -13,5 +13,6 @@
     clang
     mesa
     egl-wayland
+    libGL
   ];
 }
