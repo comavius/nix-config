@@ -11,8 +11,5 @@
     cargo
     gcc
     clang
-    mesa
-    egl-wayland
-    libGL
   ];
 }
