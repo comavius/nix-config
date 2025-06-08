@@ -23,7 +23,7 @@ impl super::Graphic for GraphicImpl {
             egl::RED_SIZE, 8,
             egl::GREEN_SIZE, 8,
             egl::BLUE_SIZE, 8,
-            egl::ALPHA_SIZE, 8,
+            egl::NONE
         ];
         let config = instance.choose_first_config(display, &attributes)
             .expect("Failed to choose EGL config")
