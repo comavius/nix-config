@@ -17,7 +17,7 @@
   in
     {
       nixosConfigurations = {
-        default = nixpkgs.lib.nixosSystem {
+        "nixos" = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
             # ./hosts/vm/core.nix
@@ -29,9 +29,9 @@
             ./core/desktop/desktop.nix
             ./core/i18n/i18n.nix
             ./core/utilities/bluetooth.nix
-            ./hosts/note/network.nix
-            ./hosts/note/boot.nix
-            ./hardware-configuration.nix
+            ./hosts/desktop/network.nix
+            ./hosts/desktop/boot.nix
+            ./hosts/desktop/hardware-configuration.nix
             home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
