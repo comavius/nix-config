@@ -17,13 +17,14 @@
   in
     {
       nixosConfigurations = {
-        "nixos" = nixpkgs.lib.nixosSystem {
+        "nixos" = nixpkgs.lib.nixosSystem rec {
           system = "x86_64-linux";
           modules = [
             # ./hosts/vm/core.nix
             # ./hosts/vm/hardware-configuration.nix
             ./core/docker/docker.nix
             ./core/utilities/utilities.nix
+            ./core/utilities/unfree-utilities.nix
             ./core/user/user.nix
             ./core/nixconf/nixconf.nix
             ./core/desktop/desktop.nix
@@ -54,6 +55,10 @@
             inherit self;
             inherit input;
             inherit conf;
+            unfree-pkgs = import nixpkgs {
+              inherit system;
+              config.allowUnfree = true;
+            };
           };
         };
       };
