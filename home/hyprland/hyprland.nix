@@ -1,4 +1,4 @@
-{conf, ...}:
+{pkgs, conf, ...}:
 let
   hyprlandConfFiles = [
     "keybindings.conf"
@@ -32,4 +32,15 @@ in
 
   # notification daemon, the same as dunst
   services.mako.enable = true;
+
+  i18n.inputMethod = {
+    enable = true;
+    type = "fcitx5";
+    fcitx5 = {
+      addons = [
+        pkgs.fcitx5-mozc
+      ];
+      waylandFrontend = true;
+    };
+  };
 }

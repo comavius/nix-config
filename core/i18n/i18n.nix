@@ -1,4 +1,4 @@
-{...}: {
+{pkgs, ...}: {
   time.timeZone = "Asia/Tokyo";
 
   i18n.defaultLocale = "en_GB.UTF-8";
@@ -13,5 +13,16 @@
     LC_PAPER = "en_GB.UTF-8";
     LC_TELEPHONE = "en_GB.UTF-8";
     LC_TIME = "en_GB.UTF-8";
+  };
+
+  i18n.inputMethod = {
+    enable = true;
+    type = "fcitx5";
+    fcitx5 = {
+      addons = [
+        pkgs.fcitx5-mozc
+      ];
+      waylandFrontend = true;
+    };
   };
 }
