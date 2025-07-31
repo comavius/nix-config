@@ -1,4 +1,8 @@
-{pkgs, conf, ...}: {
+{
+  pkgs,
+  conf,
+  ...
+}: {
   services.xserver.enable = false;
   services.greetd = {
     enable = true;
