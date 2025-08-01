@@ -21,6 +21,7 @@ in {
           "${hyprlandConfDir}/background.conf"
         ];
     };
+    xwayland.enable = true;
   };
   home.file = builtins.listToAttrs (builtins.map (confFile: {
       name = "${hyprlandConfDirFromHomeDir}/${confFile}";
