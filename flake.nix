@@ -4,7 +4,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
     flake-utils.url = "github:numtide/flake-utils";
-    home-manager.url = "github:nix-community/home-manager";
+    home-manager.url = "github:nix-community/home-manager/release-25.05";
   };
 
   outputs = {
@@ -55,10 +55,11 @@
             inherit self;
             inherit input;
             inherit conf;
-            unfree-pkgs = import nixpkgs {
-              inherit system;
-              config.allowUnfree = true;
-            };
+            unfree-pkgs = source-rel-path:
+              builtins.warn "Using UNFREE-pkgs in ${source-rel-path}" (import nixpkgs {
+                inherit system;
+                config.allowUnfree = true;
+              });
           };
         };
       };
