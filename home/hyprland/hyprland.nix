@@ -1,6 +1,7 @@
 {
   pkgs,
   conf,
+  wayggle-bg,
   ...
 }: let
   hyprlandConfFiles = [
@@ -14,14 +15,24 @@ in {
   wayland.windowManager.hyprland = {
     enable = true;
     settings = {
-      source = builtins.map (confFile: "${hyprlandConfDir}/${confFile}") hyprlandConfFiles;
+      source =
+        (builtins.map (confFile: "${hyprlandConfDir}/${confFile}") hyprlandConfFiles)
+        ++ [
+          "${hyprlandConfDir}/background.conf"
+        ];
     };
   };
   home.file = builtins.listToAttrs (builtins.map (confFile: {
       name = "${hyprlandConfDirFromHomeDir}/${confFile}";
       value = {text = builtins.readFile ./${confFile};};
     })
-    hyprlandConfFiles);
+    hyprlandConfFiles
+    ++ [
+      {
+        name = "${hyprlandConfDirFromHomeDir}/background.conf";
+        value = {text = "exec = ${wayggle-bg}/bin/wayggle-bg\n";};
+      }
+    ]);
 
   programs.wofi.enable = true;
 

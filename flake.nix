@@ -5,6 +5,10 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
     flake-utils.url = "github:numtide/flake-utils";
     home-manager.url = "github:nix-community/home-manager/release-25.05";
+    wayggle-bg = {
+      url = "github:comavius/wayggle-bg";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -12,6 +16,7 @@
     nixpkgs,
     flake-utils,
     home-manager,
+    wayggle-bg,
   } @ input: let
     conf = import ./conf.nix;
   in
@@ -47,6 +52,7 @@
                 ];
                 _module.args = {
                   inherit conf;
+                  wayggle-bg = wayggle-bg.packages."${system}".default;
                 };
               };
             }
