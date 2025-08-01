@@ -155,11 +155,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1754056685,
-        "narHash": "sha256-EXVheLBepI8HlfH1DeW1lXXnOee3ZbPd0XhIKipX//U=",
+        "lastModified": 1754063566,
+        "narHash": "sha256-EoyM8lJfLR3iDVhZRkUQms+Fm+bbCGNiqmxjqiRZ0kE=",
         "owner": "comavius",
         "repo": "wayggle-bg",
-        "rev": "f841921821bb66e35fe7b5bbcc89cf2c0340a977",
+        "rev": "04617dee69406f1ef81353dd99be093e85471587",
         "type": "github"
       },
       "original": {
