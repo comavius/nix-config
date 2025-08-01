@@ -6,6 +6,7 @@
   hyprlandConfFiles = [
     "keybindings.conf"
     "devices.conf"
+    "cursor-nvidia.conf"
   ];
   hyprlandConfDirFromHomeDir = ".config/hypr";
   hyprlandConfDir = "${conf.homeDirectory}/${hyprlandConfDirFromHomeDir}";
