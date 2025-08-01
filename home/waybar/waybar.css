@@ -1,0 +1,15 @@
+#waybar {
+    background: transparent;
+}
+
+#workspaces {
+    background: rgb(117, 117, 117);
+}
+
+#workspaces button:hover {
+    background: rgb(211, 211, 211);
+}
+
+#workspaces button.active {
+    background: rgb(0, 181, 236);
+}
