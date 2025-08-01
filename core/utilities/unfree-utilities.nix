@@ -2,5 +2,6 @@
   environment.systemPackages = with unfree-pkgs; [
     vscode
     discord
+    steam
   ];
 }
