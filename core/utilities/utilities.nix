@@ -12,5 +12,7 @@
     gcc
     clang
     nixd
+    obs-studio
+    libreoffice
   ];
 }
