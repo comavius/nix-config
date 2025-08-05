@@ -4,6 +4,9 @@ in {
   environment.systemPackages = with pkgs; [
     vscode
     discord
-    steam
   ];
+  programs.steam = {
+    enable = true;
+    package = pkgs.steam;
+  };
 }
