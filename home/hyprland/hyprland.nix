@@ -21,6 +21,9 @@ in {
           "${hyprlandConfDir}/background.conf"
         ];
     };
+    systemd = {
+      enable = true;
+    };
     xwayland.enable = true;
   };
   home.file = builtins.listToAttrs (builtins.map (confFile: {
@@ -48,6 +51,16 @@ in {
 
   # notification daemon, the same as dunst
   services.mako.enable = true;
+
+  # https://wiki.hypr.land/Useful-Utilities/Screen-Sharing/
+  # https://wiki.hypr.land/FAQ/#screenshare--obs-no-worky
+  home.packages = with pkgs; [
+    pipewire
+    wireplumber
+    xdg-desktop-portal
+    xdg-desktop-portal-hyprland
+    kdePackages.qtwayland
+  ];
 
   i18n.inputMethod = {
     enable = true;
