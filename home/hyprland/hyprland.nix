@@ -34,7 +34,7 @@ in {
     ++ [
       {
         name = "${hyprlandConfDirFromHomeDir}/background.conf";
-        value = {text = "exec = ${wayggle-bg}/bin/wayggle-bg\n";};
+        value = {text = "exec = ${wayggle-bg}/bin/wayggle-bg shadertoy\n";};
       }
     ]);
 
