@@ -39,6 +39,9 @@
             ./hosts/desktop/network.nix
             ./hosts/desktop/boot.nix
             ./hosts/desktop/hardware-configuration.nix
+            ./hosts/note/network.nix
+            ./hosts/note/boot.nix
+            ./hosts/note/hardware-configuration.nix
             home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
@@ -54,7 +57,7 @@
                 ];
                 _module.args = {
                   inherit conf;
-                  wayggle-bg = wayggle-bg.packages."${system}".default;
+                  # wayggle-bg = wayggle-bg.packages."${system}".default;
                 };
               };
             }

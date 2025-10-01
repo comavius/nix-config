@@ -30,13 +30,7 @@ in {
       name = "${hyprlandConfDirFromHomeDir}/${confFile}";
       value = {text = builtins.readFile ./${confFile};};
     })
-    hyprlandConfFiles
-    ++ [
-      {
-        name = "${hyprlandConfDirFromHomeDir}/background.conf";
-        value = {text = "exec = ${wayggle-bg}/bin/wayggle-bg shadertoy\n";};
-      }
-    ]);
+    hyprlandConfFiles);
 
   programs.wofi.enable = true;
 
