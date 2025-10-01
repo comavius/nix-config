@@ -29,9 +29,13 @@ in {
     settings = {
       source =
         (builtins.map (confFile: "${hyprlandConfDir}/${confFile}") hyprlandConfFiles)
-        ++ [
-          "${hyprlandConfDir}/background.conf"
-        ];
+        ++ (
+          if withNvidiaGpu
+          then [
+            "${hyprlandConfDir}/background.conf"
+          ]
+          else []
+        );
     };
     systemd = {
       enable = true;
