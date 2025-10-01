@@ -35,6 +35,7 @@
             ./core/desktop/desktop.nix
             ./core/i18n/i18n.nix
             ./core/utilities/bluetooth.nix
+            ./core/ld/ld.nix
             ./hosts/desktop/network.nix
             ./hosts/desktop/boot.nix
             ./hosts/desktop/hardware-configuration.nix
@@ -49,6 +50,7 @@
                   ./home/kitty/kitty.nix
                   ./home/waybar/waybar.nix
                   ./home/zsh/zsh.nix
+                  ./home/direnv/direnv.nix
                 ];
                 _module.args = {
                   inherit conf;

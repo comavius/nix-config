@@ -57,9 +57,6 @@ in {
   home.packages = with pkgs; [
     pipewire
     wireplumber
-    xdg-desktop-portal
-    xdg-desktop-portal-hyprland
-    kdePackages.qtwayland
   ];
 
   i18n.inputMethod = {

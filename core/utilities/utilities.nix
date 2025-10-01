@@ -14,5 +14,9 @@
     nixd
     obs-studio
     libreoffice
+    go
+    go-tools
+    clang-tools
+    poppler-utils
   ];
 }

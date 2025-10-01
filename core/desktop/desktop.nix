@@ -15,6 +15,8 @@
   };
   programs.hyprland.xwayland.enable = true;
   programs.virt-manager.enable = true;
+  programs.hyprland.enable = true;
+  programs.nix-ld.enable = true;
   /*
   environment.etc."greetd/sessions/hyprland.desktop" = {
     text = ''
