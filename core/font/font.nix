@@ -4,7 +4,7 @@
       noto-fonts-cjk-serif
       noto-fonts-cjk-sans
       migu
-      nerdfonts
+      noto-fonts
       noto-fonts-monochrome-emoji
     ];
     fontDir.enable = true;
@@ -19,7 +19,7 @@
           "Noto Emoji"
         ];
         monospace = [
-          "JetBrainsMono Nerd Font"
+          "Noto Sans Mono"
           "Noto Emoji"
         ];
         emoji = ["Noto Emoji"];
