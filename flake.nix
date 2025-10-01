@@ -29,6 +29,7 @@
       ./core/i18n/i18n.nix
       ./core/utilities/bluetooth.nix
       ./core/ld/ld.nix
+      ./core/font/font.nix
     ];
     homeModules = {
       useWayggleBg,
