@@ -33,6 +33,7 @@
     homeModules = {
       useWayggleBg,
       system,
+      withNvidiaGpu,
     }: [
       home-manager.nixosModules.home-manager
       {
@@ -50,7 +51,7 @@
           _module.args = {
             inherit conf;
             wayggle-bg = wayggle-bg.packages."${system}".default;
-            inherit useWayggleBg;
+            inherit useWayggleBg withNvidiaGpu;
           };
         };
       }
@@ -74,6 +75,7 @@
             coreModules
             ++ (homeModules {
               useWayggleBg = true;
+              withNvidiaGpu = true;
               inherit system;
             })
             ++ desktopHostModules;
@@ -94,6 +96,7 @@
             coreModules
             ++ (homeModules {
               useWayggleBg = false;
+              withNvidiaGpu = false;
               inherit system;
             })
             ++ noteHostModules;

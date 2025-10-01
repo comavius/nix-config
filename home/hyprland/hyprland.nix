@@ -3,13 +3,24 @@
   conf,
   wayggle-bg,
   useWayggleBg,
+  withNvidiaGpu,
   ...
 }: let
-  hyprlandConfFiles = [
+  commonConfFiles = [
     "keybindings.conf"
     "devices.conf"
+    "cursor.conf"
+  ];
+  nvidiaSpecificConfFiles = [
     "cursor-nvidia.conf"
   ];
+  hyprlandConfFiles =
+    commonConfFiles
+    ++ (
+      if withNvidiaGpu
+      then nvidiaSpecificConfFiles
+      else []
+    );
   hyprlandConfDirFromHomeDir = ".config/hypr";
   hyprlandConfDir = "${conf.homeDirectory}/${hyprlandConfDirFromHomeDir}";
 in {
