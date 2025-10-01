@@ -2,6 +2,7 @@
   pkgs,
   conf,
   wayggle-bg,
+  useWayggleBg,
   ...
 }: let
   hyprlandConfFiles = [
@@ -26,11 +27,22 @@ in {
     };
     xwayland.enable = true;
   };
+
   home.file = builtins.listToAttrs (builtins.map (confFile: {
       name = "${hyprlandConfDirFromHomeDir}/${confFile}";
       value = {text = builtins.readFile ./${confFile};};
     })
-    hyprlandConfFiles);
+    hyprlandConfFiles
+    ++ (
+      if useWayggleBg
+      then [
+        {
+          name = "${hyprlandConfDirFromHomeDir}/background.conf";
+          value = {text = "exec = ${wayggle-bg}/bin/wayggle-bg shadertoy\n";};
+        }
+      ]
+      else []
+    ));
 
   programs.wofi.enable = true;
 

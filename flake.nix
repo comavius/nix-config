@@ -19,49 +19,84 @@
     wayggle-bg,
   } @ input: let
     conf = import ./conf.nix;
+    coreModules = [
+      ./core/docker/docker.nix
+      ./core/utilities/utilities.nix
+      ./core/utilities/unfree-utilities.nix
+      ./core/user/user.nix
+      ./core/nixconf/nixconf.nix
+      ./core/desktop/desktop.nix
+      ./core/i18n/i18n.nix
+      ./core/utilities/bluetooth.nix
+      ./core/ld/ld.nix
+    ];
+    homeModules = {
+      useWayggleBg,
+      system,
+    }: [
+      home-manager.nixosModules.home-manager
+      {
+        home-manager.useGlobalPkgs = true;
+        home-manager.useUserPackages = true;
+        home-manager.users.comavius = {
+          imports = [
+            ./home/hyprland/hyprland.nix
+            ./home/home.nix
+            ./home/kitty/kitty.nix
+            ./home/waybar/waybar.nix
+            ./home/zsh/zsh.nix
+            ./home/direnv/direnv.nix
+          ];
+          _module.args = {
+            inherit conf;
+            wayggle-bg = wayggle-bg.packages."${system}".default;
+            inherit useWayggleBg;
+          };
+        };
+      }
+    ];
+    desktopHostModules = [
+      ./hosts/desktop/network.nix
+      ./hosts/desktop/boot.nix
+      ./hosts/desktop/hardware-configuration.nix
+    ];
+    noteHostModules = [
+      ./hosts/note/network.nix
+      ./hosts/note/boot.nix
+      ./hosts/note/hardware-configuration.nix
+    ];
   in
     {
       nixosConfigurations = {
-        "nixos" = nixpkgs.lib.nixosSystem rec {
+        "desktop" = nixpkgs.lib.nixosSystem rec {
           system = "x86_64-linux";
-          modules = [
-            # ./hosts/vm/core.nix
-            # ./hosts/vm/hardware-configuration.nix
-            ./core/docker/docker.nix
-            ./core/utilities/utilities.nix
-            ./core/utilities/unfree-utilities.nix
-            ./core/user/user.nix
-            ./core/nixconf/nixconf.nix
-            ./core/desktop/desktop.nix
-            ./core/i18n/i18n.nix
-            ./core/utilities/bluetooth.nix
-            ./core/ld/ld.nix
-            ./hosts/desktop/network.nix
-            ./hosts/desktop/boot.nix
-            ./hosts/desktop/hardware-configuration.nix
-            ./hosts/note/network.nix
-            ./hosts/note/boot.nix
-            ./hosts/note/hardware-configuration.nix
-            home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.users.comavius = {
-                imports = [
-                  ./home/hyprland/hyprland.nix
-                  ./home/home.nix
-                  ./home/kitty/kitty.nix
-                  ./home/waybar/waybar.nix
-                  ./home/zsh/zsh.nix
-                  ./home/direnv/direnv.nix
-                ];
-                _module.args = {
-                  inherit conf;
-                  # wayggle-bg = wayggle-bg.packages."${system}".default;
-                };
-              };
-            }
-          ];
+          modules =
+            coreModules
+            ++ (homeModules {
+              useWayggleBg = true;
+              inherit system;
+            })
+            ++ desktopHostModules;
+          specialArgs = {
+            inherit self;
+            inherit input;
+            inherit conf;
+            unfree-pkgs = source-rel-path:
+              builtins.warn "Using UNFREE-pkgs in ${source-rel-path}" (import nixpkgs {
+                inherit system;
+                config.allowUnfree = true;
+              });
+          };
+        };
+        "note" = nixpkgs.lib.nixosSystem rec {
+          system = "x86_64-linux";
+          modules =
+            coreModules
+            ++ (homeModules {
+              useWayggleBg = false;
+              inherit system;
+            })
+            ++ noteHostModules;
           specialArgs = {
             inherit self;
             inherit input;
