@@ -4,6 +4,7 @@ in {
   environment.systemPackages = with pkgs; [
     vscode
     discord
+    unityhub
   ];
   programs.steam = {
     enable = true;
