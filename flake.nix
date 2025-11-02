@@ -5,6 +5,8 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
     flake-utils.url = "github:numtide/flake-utils";
     home-manager.url = "github:nix-community/home-manager/release-25.05";
+    firefox.url = "github:nix-community/flake-firefox-nightly";
+    firefox.inputs.nixpkgs.follows = "nixpkgs";
     wayggle-bg = {
       url = "github:comavius/wayggle-bg";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -17,7 +19,8 @@
     flake-utils,
     home-manager,
     wayggle-bg,
-  } @ input: let
+    ...
+  } @ inputs: let
     conf = import ./conf.nix;
     coreModules = [
       ./core/docker/docker.nix
@@ -82,7 +85,7 @@
             ++ desktopHostModules;
           specialArgs = {
             inherit self;
-            inherit input;
+            inherit inputs;
             inherit conf;
             unfree-pkgs = source-rel-path:
               builtins.warn "Using UNFREE-pkgs in ${source-rel-path}" (import nixpkgs {
@@ -103,7 +106,7 @@
             ++ noteHostModules;
           specialArgs = {
             inherit self;
-            inherit input;
+            inherit inputs;
             inherit conf;
             unfree-pkgs = source-rel-path:
               builtins.warn "Using UNFREE-pkgs in ${source-rel-path}" (import nixpkgs {

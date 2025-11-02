@@ -10,6 +10,7 @@
     "keybindings.conf"
     "devices.conf"
     "cursor.conf"
+    "touchpad.conf"
   ];
   nvidiaSpecificConfFiles = [
     "cursor-nvidia.conf"
