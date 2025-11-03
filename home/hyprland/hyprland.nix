@@ -7,13 +7,12 @@
   ...
 }: let
   commonConfFiles = [
-    "keybindings.conf"
-    "devices.conf"
-    "cursor.conf"
-    "touchpad.conf"
+    "keyboard.conf"
+    "monitor.conf"
+    "mouse.conf"
   ];
   nvidiaSpecificConfFiles = [
-    "cursor-nvidia.conf"
+    "mouse_nvidia.conf"
   ];
   hyprlandConfFiles =
     commonConfFiles
