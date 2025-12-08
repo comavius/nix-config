@@ -2,32 +2,11 @@
   "mainBar": {
     "layer": "top",
     "position": "top",
-    "modules-left": ["hyprland/workspaces"],
+    "modules-left": [
+      "hyprland/workspaces"
+    ],
     "hyprland/workspaces": {
-      "format": "{icon}",
-      "show-special": true,
-      "on-scroll-up": "hyprctl dispatch workspace r-1",
-      "on-scroll-down": "hyprctl dispatch workspace r+1",
-      "format-icons": {
-        "1": "1",
-        "2": "2",
-        "3": "3",
-        "4": "4",
-        "5": "5",
-        "6": "6",
-        "7": "7",
-        "8": "8"
-      },
-      "persistent-workspaces": {
-        "1": [],
-        "2": [],
-        "3": [],
-        "4": [],
-        "5": [],
-        "6": [],
-        "7": [],
-        "8": []
-      }
+      "format": "{name}"
     }
   }
 }

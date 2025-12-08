@@ -5,6 +5,7 @@ in {
     vscode
     discord
     unityhub
+    google-chrome
   ];
   programs.steam = {
     enable = true;

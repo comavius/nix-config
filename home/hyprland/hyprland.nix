@@ -10,6 +10,7 @@
     "keyboard.conf"
     "monitor.conf"
     "mouse.conf"
+    "exec.conf"
   ];
   nvidiaSpecificConfFiles = [
     "mouse_nvidia.conf"
@@ -53,7 +54,11 @@ in {
       then [
         {
           name = "${hyprlandConfDirFromHomeDir}/background.conf";
-          value = {text = "exec = ${wayggle-bg}/bin/wayggle-bg shadertoy\n";};
+          value = {
+            text = ''
+              exec = ${wayggle-bg}/bin/wayggle-bg shadertoy
+            '';
+          };
         }
       ]
       else []
@@ -78,6 +83,7 @@ in {
   home.packages = with pkgs; [
     pipewire
     wireplumber
+    hyprland-autoname-workspaces
   ];
 
   i18n.inputMethod = {

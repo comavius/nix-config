@@ -69,6 +69,7 @@
       ./hosts/note/network.nix
       ./hosts/note/boot.nix
       ./hosts/note/hardware-configuration.nix
+      ./hosts/note/swap.nix
     ];
   in
     {
