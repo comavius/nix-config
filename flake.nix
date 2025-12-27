@@ -11,6 +11,7 @@
       url = "github:comavius/wayggle-bg";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    rust-overlay.url = "github:oxalica/rust-overlay";
   };
 
   outputs = {
@@ -19,6 +20,7 @@
     flake-utils,
     home-manager,
     wayggle-bg,
+    rust-overlay,
     ...
   } @ inputs: let
     conf = import ./conf.nix;
@@ -93,6 +95,19 @@
                 inherit system;
                 config.allowUnfree = true;
               });
+            rust-toolchain = let
+              rs-pkgs = import nixpkgs {
+                inherit system;
+                overlays = [rust-overlay.overlays.default];
+              };
+
+              toolchain = rs-pkgs.rust-bin.stable.latest.default.override {
+                extensions = [
+                  "rust-src"
+                ];
+              };
+            in
+              toolchain;
           };
         };
         "note" = nixpkgs.lib.nixosSystem rec {
@@ -114,6 +129,19 @@
                 inherit system;
                 config.allowUnfree = true;
               });
+            rust-toolchain = let
+              rs-pkgs = import nixpkgs {
+                inherit system;
+                overlays = [rust-overlay.overlays.default];
+              };
+
+              toolchain = rs-pkgs.rust-bin.stable.latest.default.override {
+                extensions = [
+                  "rust-src"
+                ];
+              };
+            in
+              toolchain;
           };
         };
       };
