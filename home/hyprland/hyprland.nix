@@ -76,7 +76,12 @@ in {
   services.hypridle.enable = true;
 
   # notification daemon, the same as dunst
-  services.mako.enable = true;
+  services.mako = {
+    enable = true;
+    settings = {
+      default-timeout = 20 * 1000; # milli-sec
+    };
+  };
 
   # https://wiki.hypr.land/Useful-Utilities/Screen-Sharing/
   # https://wiki.hypr.land/FAQ/#screenshare--obs-no-worky
