@@ -1,6 +1,5 @@
 {
   pkgs,
-  unfree-pkgs,
   inputs,
   rust-toolchain,
   ...
@@ -25,7 +24,6 @@
     poppler-utils
     wl-clipboard
     rust-toolchain
-    (unfree-pkgs "core/utilities/utilities.nix").unityhub
     inputs.firefox.packages."${pkgs.system}".firefox-nightly-bin
   ];
 }

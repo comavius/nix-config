@@ -1,5 +1,4 @@
-{unfree-pkgs, ...}: let
-  pkgs = unfree-pkgs "hosts/desktop/boot.nix";
+{unfreePkgs, ...}: let
 in {
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -16,6 +15,6 @@ in {
     powerManagement.enable = true;
     open = false;
     nvidiaSettings = true;
-    package = pkgs.linuxPackages_6_12.nvidiaPackages.stable;
+    package = unfreePkgs.linuxPackages_6_12.nvidiaPackages.stable;
   };
 }

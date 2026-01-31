@@ -1,14 +1,14 @@
-{unfree-pkgs, ...}: let
-  pkgs = unfree-pkgs "core/utilities/unfree-utilities.nix";
+{unfreePkgs, ...}: let
 in {
-  environment.systemPackages = with pkgs; [
+  environment.systemPackages = with unfreePkgs; [
     vscode
     discord
     unityhub
     google-chrome
+    unityhub
   ];
   programs.steam = {
     enable = true;
-    package = pkgs.steam;
+    package = unfreePkgs.steam;
   };
 }

@@ -1,5 +1,4 @@
-{unfree-pkgs, ...}: let
-  pkgs = unfree-pkgs "hosts/desktop/boot.nix";
+{...}: let
 in {
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;

@@ -81,7 +81,7 @@
           modules =
             coreModules
             ++ (homeModules {
-              useWayggleBg = true;
+              useWayggleBg = false;
               withNvidiaGpu = true;
               inherit system;
             })
@@ -90,11 +90,17 @@
             inherit self;
             inherit inputs;
             inherit conf;
-            unfree-pkgs = source-rel-path:
-              builtins.warn "Using UNFREE-pkgs in ${source-rel-path}" (import nixpkgs {
+            unfreePkgs = let
+              innerUnfreePkgs = import nixpkgs {
                 inherit system;
                 config.allowUnfree = true;
-              });
+              };
+              setUnfreeWarning = (import ./lib.nix {lib = nixpkgs.lib;}).setUnfreeWarning;
+            in
+              setUnfreeWarning {
+                maybeAttrs = innerUnfreePkgs;
+                prefix = "pkgs";
+              };
             rust-toolchain = let
               rs-pkgs = import nixpkgs {
                 inherit system;
@@ -124,11 +130,17 @@
             inherit self;
             inherit inputs;
             inherit conf;
-            unfree-pkgs = source-rel-path:
-              builtins.warn "Using UNFREE-pkgs in ${source-rel-path}" (import nixpkgs {
+            unfreePkgs = let
+              innerUnfreePkgs = import nixpkgs {
                 inherit system;
                 config.allowUnfree = true;
-              });
+              };
+              setUnfreeWarning = (import ./lib.nix {lib = nixpkgs.lib;}).setUnfreeWarning;
+            in
+              setUnfreeWarning {
+                maybeAttrs = innerUnfreePkgs;
+                prefix = "pkgs";
+              };
             rust-toolchain = let
               rs-pkgs = import nixpkgs {
                 inherit system;
