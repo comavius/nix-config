@@ -1,6 +1,10 @@
 {
   description = "Nix flakes for my NixOS";
 
+  nixConfig = {
+    extra-experimental-features = "pipe-operators";
+  };
+
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     flake-utils.url = "github:numtide/flake-utils";
@@ -35,6 +39,7 @@
       ./core/utilities/bluetooth.nix
       ./core/ld/ld.nix
       ./core/font/font.nix
+      ./core/ipad/ipad.nix
     ];
     homeModules = {
       useWayggleBg,

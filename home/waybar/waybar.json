@@ -6,7 +6,10 @@
       "hyprland/workspaces"
     ],
     "hyprland/workspaces": {
-      "format": "{name}"
+      "format": "{name}",
+      "workspace-taskbar": {
+        "enable": true
+      }
     }
   }
 }

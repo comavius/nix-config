@@ -4,7 +4,28 @@
   inputs,
   rust-toolchain,
   ...
-}: {
+}:
+let
+  canon-capt = import ./canon-capt.nix {
+    pkgs = unfree-pkgs "core/utilities/canon-capt.nix";
+  };
+in
+{
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+    openFirewall = true;
+  };
+
+  services.printing = {
+    enable = true;
+    drivers = with pkgs; [
+      cups-filters
+      cups-browsed
+      canon-capt
+    ];
+  };
+
   environment.systemPackages = with pkgs; [
     coreutils-full
     bottom
